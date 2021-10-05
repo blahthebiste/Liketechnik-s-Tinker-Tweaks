@@ -214,6 +214,8 @@ public class ModToolLeveling extends ProjectileModifierTrait {
         // for some reason the proxy is messed up. cba to fix now
         LiketechniksTinkerTweaks.proxy.playLevelupDing(player);
         LiketechniksTinkerTweaks.proxy.sendLevelUpMessage(data.level, tool, player);
+        // add extra message for the modifier
+        LiketechniksTinkerTweaks.proxy.sendModifierMessage(modifier, tool, player);
       }
       try {
         NBTTagCompound rootTag = TagUtil.getTagSafe(tool);
