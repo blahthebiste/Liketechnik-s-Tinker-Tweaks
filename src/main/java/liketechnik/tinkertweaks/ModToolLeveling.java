@@ -149,7 +149,7 @@ public class ModToolLeveling extends ProjectileModifierTrait {
     NBTTagList tagList = TagUtil.getModifiersTagList(tool);
     int index = TinkerUtil.getIndexInCompoundList(tagList, identifier);
     NBTTagCompound modifierTag = tagList.getCompoundTagAt(index);
-    
+    IModifier modifier;
     ToolLevelNBT data = getLevelData(modifierTag);
     data.xp += amount;
     
@@ -180,7 +180,7 @@ public class ModToolLeveling extends ProjectileModifierTrait {
           data.bonusModifiers++;
         }
         if (modifierIndex != modifiers.size() || Config.modifierAndFree()) {
-          IModifier modifier = modifiers.get(modifierIndex);
+          modifier = modifiers.get(modifierIndex);
         
           int freeModifiers = ToolHelper.getFreeModifiers(tool);
         
