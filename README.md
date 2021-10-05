@@ -1,3 +1,6 @@
+This is a fork of Liketechnik-s-Tinker-Tweaks, which is itself a fork of Tinker Tool Leveling. Liketechnik-s-Tinker-Tweaks adds random modifiers to your tool when it levels up, but unlike the old Iguana's Tinker Tweaks, there are no special chat messages letting you know which modifier you got. This fork simply re-adds those messages for all vanilla Tinker modifiers, plus configuration options to change the messages or add new ones for other modifiers.
+
+
 # Liketechnik's Tinker Tweaks
 
 This mod basically gives you back the behaviour of the old [Iguana Tinker Tweaks](https://github.com/SlimeKnights/IguanaTweaksTConstruct) for MC 1.7.10 (and downwards). It is based on [Tinker's Tool Leveling](https://github.com/SlimeKnights/TinkersToolLeveling), but has a completely different behaviour: For every new level, you get a random modifier applied to your tool. If you want to go fully crazy, you can configure the mod to give you a free modifier every level on top of that.
