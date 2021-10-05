@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import slimeknights.tconstruct.common.Sounds;
+import slimeknights.tconstruct.library.modifiers.*;
 
 @Mod.EventBusSubscriber(modid = LiketechniksTinkerTweaks.MODID)
 public class CommonProxy {
@@ -32,6 +33,20 @@ public class CommonProxy {
     // generic message
     else {
       textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.levelup.generic", itemStack.getDisplayName() + TextFormatting.DARK_AQUA, Tooltips.getLevelString(level)));
+    }
+    player.sendStatusMessage(textComponent, false);
+  }
+  
+  // Just like sendLevelUpMessage, except this message tells the player which modifier they got.
+  public void sendModifierMessage(IModifier modifier, ItemStack itemStack, EntityPlayer player){
+    ITextComponent textComponent;
+    // special message
+    if(I18n.canTranslate("message.modifier." + modifier.name)) {
+      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.modifier." + modifier.name + TextFormatting.DARK_AQUA));
+    }
+    // generic message
+    else {
+      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.modifier.generic", itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
     }
     player.sendStatusMessage(textComponent, false);
   }
