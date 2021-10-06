@@ -16,6 +16,10 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+		maven {
+			name 'DVS1 Maven FS'
+			url 'http://dvs1.progwml6.com/files/maven'
+		}
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -29,7 +33,7 @@ repositories {
     }
     maven {
         name 'forge'
-        url 'http://files.minecraftforge.net/maven'
+        url 'https://maven.minecraftforge.net'
     }
 }
 
@@ -91,7 +95,7 @@ minecraft {
 dependencies {
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
-    deobfCompile "slimeknights.mantle:Mantle:${config.minecraft_version}-${config.mantle_version}"
+    deobfCompile "slimeknights.mantle:Mantle:1.12-${config.mantle_version}"
     deobfCompile "slimeknights:TConstruct:${config.minecraft_version}-${config.tic_version}"
     deployerJars 'org.apache.maven.wagon:wagon-ssh:2.2'
 }

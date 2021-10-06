@@ -40,14 +40,19 @@ public class CommonProxy {
   // Just like sendLevelUpMessage, except this message tells the player which modifier they got.
   public void sendModifierMessage(IModifier modifier, ItemStack itemStack, EntityPlayer player){
     ITextComponent textComponent;
+	String pure_modifier = modifier.getLocalizedName();
+	pure_modifier = pure_modifier.replaceAll(" ", "_");
+	pure_modifier = pure_modifier.toLowerCase();
     // special message
-    if(I18n.canTranslate("message.modifier." + modifier.name)) {
-      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.modifier." + modifier.name + TextFormatting.DARK_AQUA));
+    if(I18n.canTranslate("message.modifier." + pure_modifier)) {
+      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted(("message.modifier." + pure_modifier), TextFormatting.DARK_AQUA));
     }
     // generic message
     else {
       textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.modifier.generic", itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
     }
+
+
     player.sendStatusMessage(textComponent, false);
   }
 
