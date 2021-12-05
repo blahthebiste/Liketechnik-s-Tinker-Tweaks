@@ -163,7 +163,7 @@ public class ModToolLeveling extends ProjectileModifierTrait {
     boolean leveledUp = false;
     // check for levelup
     if (data.xp >= xpForLevelup) {
-      data.xp -= xpForLevelup;
+      data.xp = 0; // Do not carry over extra XP; max 1 levelup per instance of XP gain
       data.level++;
     
       List<IModifier> modifiers = Config.getModifiers(tool.getItem());
