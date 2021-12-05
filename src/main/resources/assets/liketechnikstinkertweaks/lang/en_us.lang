@@ -32,6 +32,7 @@ message.levelup.generic=Your %s has reached level %s
 
 message.modifier.haste=Adding redstone to a tool seems to increase its speed. (§4+Haste§3)
 message.modifier.luck=Increased chance of drops (§9+Luck§3)
+message.modifier.mending_moss=Your tool regenerates in sunlight (§2+Mending§3)
 message.modifier.diamond=Harder, better, faster, stronger (§b+Diamond§3)
 message.modifier.emerald=50％ more durability (§a+Emerald§3)
 message.modifier.writable=+1 Modifier (§f+Writable§3)
