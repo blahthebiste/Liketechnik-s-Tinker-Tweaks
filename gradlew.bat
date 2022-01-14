@@ -13,7 +13,7 @@ set DEFAULT_JVM_OPTS=
 
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
-set APP_BASE_NAME=%~n0
+set APP_BASE_NAME=TinkersToolLevelingWithRandomModifiers
 set APP_HOME=%DIRNAME%
 
 @rem Find java.exe

@@ -25,12 +25,69 @@ import static slimeknights.tconstruct.tools.harvest.TinkerHarvestTools.scythe;
 @ConfigSerializable
 public class ConfigFile extends AbstractConfigFile {
 
-  private final static int CONFIG_VERSION = 2;
+  private final static int CONFIG_VERSION = 3;
   
   private String[] defaultModifiers = new String[]{"haste", "luck", "diamond", "reinforced", "soulbound", "mending_moss", "glowing"};
   private String[] allModifiers = new String[]{"aquadynamic", "hovering", "harvestwidth", "endspeed", "momentum", "superheat", "baconlicious", "soulbound", "reinforced", "sharp", "crumbling", "splintering", "crude2", "crude1",
                 "stiff", "poisonous", "webbed", "harvestheight", "flammable", "coldblooded", "holy", "established", "luck", "unnatural", "smite", "glowing", "mending_moss", "haste", "jagged", "dense", "diamond", "shocking",
                 "fiery", "heavy", "fractured", "enderfence", "hellish", "sharpness", "lightweight", "fins", "bane_of_arthopods", "splitting", "necrotic", "shulking", "insatiable", "prickly", "spiky", "petramor"};
+  private static Map<Integer, String> defaultLevelTitles = new HashMap<Integer, String>() {{
+	  put(0,"Like new");
+	  put(1,"Clumsy");
+	  put(2,"Comfortable");
+	  put(3,"Accustomed");
+	  put(4,"Adept");
+	  put(5,"Expert");
+	  put(6,"Master");
+	  put(7,"Grandmaster");
+	  put(8,"Heroic");
+	  put(9,"Legendary");
+	  put(10,"Godlike");
+	  put(11,"Awesome");
+	  put(19,"MoxieGrrl");
+	  put(42,"boni");
+	  put(66,"Jadedcat");
+	  put(99,"Hacker");
+  }};
+  private static Map<Integer, String> defaultLevelupMessages = new HashMap<Integer, String>() {{
+	  put(2,"You begin to feel comfortable handling the %s");
+	  put(3,"You are now accustomed to the weight of the %s");
+	  put(4,"You have become adept at handling the %s");
+	  put(5,"You are now an expert at using the %s !");
+	  put(6,"You have mastered the %s!");
+	  put(7,"You have grandmastered the %s!");
+	  put(8,"You feel like you could fulfill mighty deeds with your %s!");
+	  put(9,"You and your %s are living legends!");
+	  put(10,"No god could stand in the way of you and your %s!");
+	  put(11,"Your %s is pure awesome.");
+  }};  
+  private static Map<String, String> defaultModifierMessages = new HashMap<String, String>() {{
+	  put("aquadynamic","Mine faster underwater! (§9+Aquadynamic§3)");
+	  put("autosmelt","No furnace needed! (§6+Autosmelt§3)");
+	  put("bane_of_arthropods","Spiders don't stand a chance! (§1+Bane of Arthropods§3)");
+	  put("beheading","So many heads to take, so little time... (§5+Beheading§3)");
+	  put("diamond","Harder, better, faster, stronger (§b+Diamond§3)");
+	  put("emerald","50 percent more durability (§a+Emerald§3)");
+	  put("fiery","Toasty! (§6+Fiery§3)");
+	  put("fins","Water no longer inhibits projectile motion (§9+Fins§3)");
+	  put("glowing","Happiness can be found, even in the darkest of times, if one only remembers to turn on the light. (§e+Glowing§3)");
+	  put("haste","Adding redstone to a tool seems to increase its speed. (§4+Haste§3)");
+	  put("knockback","For when you need some personal space (§7+Knockback§3)");
+	  put("lightweight","It is now 10 percent faster (§b+Lightweight§3)");
+	  put("luck","Increased chance of drops (§9+Luck§3)");
+	  put("mending_moss","Your tool regenerates in sunlight (§2+Mending§3)");
+	  put("necrotic","Lifesteal based on damage dealt (§4+Necrotic§3)");
+	  put("reinforced","+10 percent chance to not use durability (§0+Reinforced§3)");
+	  put("sharp","Quartz-honed edges deal extra damage (§f+Sharpness§3)");
+	  put("shulking","Levitate your foes, holding them in midair (§5+Shulking§3)");
+	  put("smite","Obliterate the undead! (§e+Smite§3)");
+	  put("soulbound","It will follow you anywhere, even into the afterlife (§8+Soulbound§3)");
+	  put("splitting","Chance to split into extra projectiles (§e+Splitting§3)");
+	  put("stiff","Blocking is effective against more powerful blows (§7+Stiff§3)");
+	  put("webbed","Slow targets on hit (§f+Webbed§3)");
+	  put("writable","+1 Modifier (§f+Writable§3)");
+  }};
+  
 
   @Setting
   General general = new General();
@@ -38,6 +95,8 @@ public class ConfigFile extends AbstractConfigFile {
   ToolXP toolxp = new ToolXP();
   @Setting
   Modifier modifier = new Modifier();
+  @Setting
+  Messages messages = new Messages();
 
   public ConfigFile() {
   }
@@ -58,7 +117,13 @@ public class ConfigFile extends AbstractConfigFile {
     TinkerRegistry.getAllModifiers().stream()
             .filter(mod -> Arrays.stream(defaultModifiers).anyMatch(it -> it.equals(mod.getIdentifier())))
             .forEach(mod -> modifier.modifiers.add(mod.getIdentifier()));
-    
+    // Fill in modifier messages:
+	messages.levelTitles.putAll(defaultLevelTitles);
+	// Fill in levelup messages:
+	messages.levelupMessages.putAll(defaultLevelupMessages);
+    // Fill in modifier messages:
+	messages.modifierMessages.putAll(defaultModifierMessages);
+	
     TinkerRegistry.getTools().stream()
                   .filter(tool -> !toolxp.baseXpForTool.containsKey(tool))
                   .forEach(tool -> {
@@ -137,5 +202,27 @@ public class ConfigFile extends AbstractConfigFile {
     
     @Setting(comment = "Modifiers for each of the listed tools")
     public Map<Item, List<String>> modifiersForTool = new HashMap<>();
+  }
+  
+  @ConfigSerializable
+  static class Messages {
+    @Setting(comment = "Use level titles from this config file instead of hard-coded values? (This is the part of the tooltip that says your skill with the tool is Clumsy or Accustomed or Legendary, etc)")
+    public boolean configLevelTitles = true;
+    @Setting(comment = "Level titles go here. The level itself will be used when it does not have a specific title.")
+    public Map<Integer, String> levelTitles = new HashMap<>();
+	
+    @Setting(comment = "Use levelup messages from this config file instead of hard-coded values? (This is the message printed to the chat telling you what level your tool has reached)")
+    public boolean configLevelupMessages = true;
+    @Setting(comment = "Levelup messages go here. The '%s' will be replaced with the name of your tool.")
+    public Map<Integer, String> levelupMessages = new HashMap<>();
+    @Setting(comment = "Generic Levelup message to fall back on:")
+    public String genericLevelupMessage = "Your %s has reached level %s";
+	
+    @Setting(comment = "Use modifier messages from this config file instead of hard-coded values? (This is the message printed to the chat telling you what random modifier you got)")
+    public boolean configModifierMessages = true;
+    @Setting(comment = "Modifier messages go here. Look up Minecraft color codes if you are confused by this symbol: §")
+    public Map<String, String> modifierMessages = new HashMap<>();
+    @Setting(comment = "Generic modifier message to fall back on:")
+    public String genericModifierMessage = "Your tool has gained a new modifier!";
   }
 }

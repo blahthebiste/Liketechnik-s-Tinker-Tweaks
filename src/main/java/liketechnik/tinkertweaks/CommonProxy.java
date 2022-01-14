@@ -1,5 +1,6 @@
 package liketechnik.tinkertweaks;
 
+import liketechnik.tinkertweaks.config.Config;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -26,14 +27,19 @@ public class CommonProxy {
 
   public void sendLevelUpMessage(int level, ItemStack itemStack, EntityPlayer player) {
     ITextComponent textComponent;
-    // special message
-    if(I18n.canTranslate("message.levelup." + level)) {
-      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.levelup." + level, itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
-    }
-    // generic message
-    else {
-      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.levelup.generic", itemStack.getDisplayName() + TextFormatting.DARK_AQUA, Tooltips.getLevelString(level)));
-    }
+	if (Config.shouldUseConfigLevelupMessages()) {
+		textComponent = new TextComponentString(TextFormatting.DARK_AQUA + String.format(Config.getLevelupMessage(level), itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
+	}
+	else {
+		// special message
+		if(I18n.canTranslate("message.levelup." + level)) {
+		  textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.levelup." + level, itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
+		}
+		// generic message
+		else {
+		  textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.levelup.generic", itemStack.getDisplayName() + TextFormatting.DARK_AQUA, Tooltips.getLevelString(level)));
+		}
+	}
     player.sendStatusMessage(textComponent, false);
   }
   
@@ -43,16 +49,19 @@ public class CommonProxy {
 	String pure_modifier = modifier.getLocalizedName();
 	pure_modifier = pure_modifier.replaceAll(" ", "_");
 	pure_modifier = pure_modifier.toLowerCase();
-    // special message
-    if(I18n.canTranslate("message.modifier." + pure_modifier)) {
-      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted(("message.modifier." + pure_modifier), TextFormatting.DARK_AQUA));
-    }
-    // generic message
-    else {
-      textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.modifier.generic", itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
-    }
-
-
+	if (Config.shouldUseConfigModifierMessages()) {
+		textComponent = new TextComponentString(TextFormatting.DARK_AQUA + Config.getModifierMessage(pure_modifier));
+	}
+	else {
+		// special message
+		if(I18n.canTranslate("message.modifier." + pure_modifier)) {
+		  textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted(("message.modifier." + pure_modifier), TextFormatting.DARK_AQUA));
+		}
+		// generic message
+		else {
+		  textComponent = new TextComponentString(TextFormatting.DARK_AQUA + I18n.translateToLocalFormatted("message.modifier.generic", itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
+		}
+	}
     player.sendStatusMessage(textComponent, false);
   }
 

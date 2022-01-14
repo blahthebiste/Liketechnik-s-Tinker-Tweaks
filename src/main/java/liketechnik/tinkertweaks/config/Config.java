@@ -2,9 +2,12 @@ package liketechnik.tinkertweaks.config;
 
 import net.minecraft.item.Item;
 
-import java.io.File;
+import java.io.*;
+// import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import slimeknights.mantle.config.AbstractConfig;
 import slimeknights.tconstruct.library.TinkerRegistry;
@@ -48,5 +51,48 @@ public class Config extends AbstractConfig {
   
   public static boolean modifierAndFree() {
     return INSTANCE.configFile.modifier.both;
+  }
+  
+  // Newly added for getting message strings:
+  public static boolean shouldUseConfigLevelTitles() {
+	  return INSTANCE.configFile.messages.configLevelTitles;
+  }
+  public static boolean shouldUseConfigLevelupMessages() {
+	  return INSTANCE.configFile.messages.configLevelupMessages;
+  }
+  public static boolean shouldUseConfigModifierMessages() {
+	  return INSTANCE.configFile.messages.configModifierMessages;
+  }
+  public static String getGenericLevelupMessage() {
+	  return INSTANCE.configFile.messages.genericLevelupMessage;
+  }
+  public static String getGenericModifierMessage() {
+	  return INSTANCE.configFile.messages.genericModifierMessage;
+  }
+  public static String getLevelTitle(int currentLevel) {
+	  ConfigFile.Messages messages = INSTANCE.configFile.messages;
+	  if (messages.levelTitles.containsKey(currentLevel)) {
+		return messages.levelTitles.get(currentLevel);
+	  }
+	  String levelStr = Integer.toString(currentLevel);
+	  return levelStr;
+  }
+  public static String getLevelupMessage(int currentLevel) {
+	  ConfigFile.Messages messages = INSTANCE.configFile.messages;
+	  if (messages.levelupMessages.containsKey(currentLevel)) {
+		return messages.levelupMessages.get(currentLevel);
+	  }
+	  return messages.genericLevelupMessage;
+  }
+  public static String getModifierMessage(String mod) {
+	  ConfigFile.Messages messages = INSTANCE.configFile.messages;
+	  if (messages.modifierMessages.containsKey(mod)) {
+		// Remove excess unicode C2 characters
+		String message = messages.modifierMessages.get(mod);
+		String recoded_message = "";
+		recoded_message = message.replaceAll("\u00C2", "");
+		return recoded_message;
+	  }
+	  return messages.genericModifierMessage;
   }
 }

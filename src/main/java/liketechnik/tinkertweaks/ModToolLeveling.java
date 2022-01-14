@@ -151,6 +151,10 @@ public class ModToolLeveling extends ProjectileModifierTrait {
     NBTTagCompound modifierTag = tagList.getCompoundTagAt(index);
     IModifier modifier = null;
     ToolLevelNBT data = getLevelData(modifierTag);
+	// Special case for max(int) damage, prevent overflow by not granting any XP
+	if (amount + data.xp < 0) {
+		amount = 0;
+	}
     data.xp += amount;
     
     // is max level?
