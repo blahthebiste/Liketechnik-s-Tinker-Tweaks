@@ -62,30 +62,30 @@ public class ConfigFile extends AbstractConfigFile {
 	  put(11,"Your %s is pure awesome.");
   }};  
   private static Map<String, String> defaultModifierMessages = new HashMap<String, String>() {{
-	  put("aquadynamic","Mine faster underwater! (§9+Aquadynamic§3)");
-	  put("autosmelt","No furnace needed! (§6+Autosmelt§3)");
-	  put("bane_of_arthropods","Spiders don't stand a chance! (§1+Bane of Arthropods§3)");
-	  put("beheading","So many heads to take, so little time... (§5+Beheading§3)");
-	  put("diamond","Harder, better, faster, stronger (§b+Diamond§3)");
-	  put("emerald","50 percent more durability (§a+Emerald§3)");
-	  put("fiery","Toasty! (§6+Fiery§3)");
-	  put("fins","Water no longer inhibits projectile motion (§9+Fins§3)");
-	  put("glowing","Happiness can be found, even in the darkest of times, if one only remembers to turn on the light. (§e+Glowing§3)");
-	  put("haste","Adding redstone to a tool seems to increase its speed. (§4+Haste§3)");
-	  put("knockback","For when you need some personal space (§7+Knockback§3)");
-	  put("lightweight","It is now 10 percent faster (§b+Lightweight§3)");
-	  put("luck","Increased chance of drops (§9+Luck§3)");
-	  put("mending_moss","Your tool regenerates in sunlight (§2+Mending§3)");
-	  put("necrotic","Lifesteal based on damage dealt (§4+Necrotic§3)");
-	  put("reinforced","+10 percent chance to not use durability (§0+Reinforced§3)");
-	  put("sharp","Quartz-honed edges deal extra damage (§f+Sharpness§3)");
-	  put("shulking","Levitate your foes, holding them in midair (§5+Shulking§3)");
-	  put("smite","Obliterate the undead! (§e+Smite§3)");
-	  put("soulbound","It will follow you anywhere, even into the afterlife (§8+Soulbound§3)");
-	  put("splitting","Chance to split into extra projectiles (§e+Splitting§3)");
-	  put("stiff","Blocking is effective against more powerful blows (§7+Stiff§3)");
-	  put("webbed","Slow targets on hit (§f+Webbed§3)");
-	  put("writable","+1 Modifier (§f+Writable§3)");
+	  put("aquadynamic","Mine faster underwater! (\u00A79+Aquadynamic\u00A73)");
+	  put("autosmelt","No furnace needed! (\u00A76+Autosmelt\u00A73)");
+	  put("bane_of_arthropods","Spiders don't stand a chance! (\u00A71+Bane of Arthropods\u00A73)");
+	  put("beheading","So many heads to take, so little time... (\u00A75+Beheading\u00A73)");
+	  put("diamond","Harder, better, faster, stronger (\u00A7b+Diamond\u00A73)");
+	  put("emerald","50 percent more durability (\u00A7a+Emerald\u00A73)");
+	  put("fiery","Toasty! (\u00A76+Fiery\u00A73)");
+	  put("fins","Water no longer inhibits projectile motion (\u00A79+Fins\u00A73)");
+	  put("glowing","Happiness can be found, even in the darkest of times, if one only remembers to turn on the light. (\u00A7e+Glowing\u00A73)");
+	  put("haste","Adding redstone to a tool seems to increase its speed. (\u00A74+Haste\u00A73)");
+	  put("knockback","For when you need some personal space (\u00A77+Knockback\u00A73)");
+	  put("lightweight","It is now 10 percent faster (\u00A7b+Lightweight\u00A73)");
+	  put("luck","Increased chance of drops (\u00A79+Luck\u00A73)");
+	  put("mending_moss","Your tool regenerates in sunlight (\u00A72+Mending\u00A73)");
+	  put("necrotic","Lifesteal based on damage dealt (\u00A74+Necrotic\u00A73)");
+	  put("reinforced","+10 percent chance to not use durability (\u00A70+Reinforced\u00A73)");
+	  put("sharp","Quartz-honed edges deal extra damage (\u00A7f+Sharpness\u00A73)");
+	  put("shulking","Levitate your foes, holding them in midair (\u00A75+Shulking\u00A73)");
+	  put("smite","Obliterate the undead! (\u00A7e+Smite\u00A73)");
+	  put("soulbound","It will follow you anywhere, even into the afterlife (\u00A78+Soulbound\u00A73)");
+	  put("splitting","Chance to split into extra projectiles (\u00A7e+Splitting\u00A73)");
+	  put("stiff","Blocking is effective against more powerful blows (\u00A77+Stiff\u00A73)");
+	  put("webbed","Slow targets on hit (\u00A7f+Webbed\u00A73)");
+	  put("writable","+1 Modifier (\u00A7f+Writable\u00A73)");
   }};
   
 
@@ -118,11 +118,11 @@ public class ConfigFile extends AbstractConfigFile {
             .filter(mod -> Arrays.stream(defaultModifiers).anyMatch(it -> it.equals(mod.getIdentifier())))
             .forEach(mod -> modifier.modifiers.add(mod.getIdentifier()));
     // Fill in modifier messages:
-	messages.levelTitles.putAll(defaultLevelTitles);
+	// messages.levelTitles.putAll(defaultLevelTitles);
 	// Fill in levelup messages:
-	messages.levelupMessages.putAll(defaultLevelupMessages);
+	// messages.levelupMessages.putAll(defaultLevelupMessages);
     // Fill in modifier messages:
-	messages.modifierMessages.putAll(defaultModifierMessages);
+	// messages.modifierMessages.putAll(defaultModifierMessages);
 	
     TinkerRegistry.getTools().stream()
                   .filter(tool -> !toolxp.baseXpForTool.containsKey(tool))
@@ -209,19 +209,25 @@ public class ConfigFile extends AbstractConfigFile {
     @Setting(comment = "Use level titles from this config file instead of hard-coded values? (This is the part of the tooltip that says your skill with the tool is Clumsy or Accustomed or Legendary, etc)")
     public boolean configLevelTitles = true;
     @Setting(comment = "Level titles go here. The level itself will be used when it does not have a specific title.")
-    public Map<Integer, String> levelTitles = new HashMap<>();
+    public Map<Integer, String> levelTitles = new HashMap<>(defaultLevelTitles);
+    // public Map<Integer, String> levelTitles = defaultLevelTitles;
+	// levelTitles.putAll(defaultLevelTitles);
 	
     @Setting(comment = "Use levelup messages from this config file instead of hard-coded values? (This is the message printed to the chat telling you what level your tool has reached)")
     public boolean configLevelupMessages = true;
     @Setting(comment = "Levelup messages go here. The '%s' will be replaced with the name of your tool.")
-    public Map<Integer, String> levelupMessages = new HashMap<>();
+    public Map<Integer, String> levelupMessages = new HashMap<>(defaultLevelupMessages);
+    // public Map<Integer, String> levelupMessages = defaultLevelupMessages;
+	// levelupMessages.putAll(defaultLevelupMessages);
     @Setting(comment = "Generic Levelup message to fall back on:")
     public String genericLevelupMessage = "Your %s has reached level %s";
 	
     @Setting(comment = "Use modifier messages from this config file instead of hard-coded values? (This is the message printed to the chat telling you what random modifier you got)")
     public boolean configModifierMessages = true;
-    @Setting(comment = "Modifier messages go here. Look up Minecraft color codes if you are confused by this symbol: §")
-    public Map<String, String> modifierMessages = new HashMap<>();
+    @Setting(comment = "Modifier messages go here. Look up Minecraft color codes if you are confused by this symbol: \u00A7")
+    public Map<String, String> modifierMessages = new HashMap<>(defaultModifierMessages);
+    // public Map<String, String> modifierMessages = defaultModifierMessages;
+	// modifierMessages.putAll(defaultModifierMessages);
     @Setting(comment = "Generic modifier message to fall back on:")
     public String genericModifierMessage = "Your tool has gained a new modifier!";
   }

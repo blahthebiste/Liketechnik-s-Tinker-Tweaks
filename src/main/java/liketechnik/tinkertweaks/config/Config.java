@@ -84,11 +84,11 @@ public class Config extends AbstractConfig {
 	  }
 	  return messages.genericLevelupMessage;
   }
-  public static String getModifierMessage(String mod) {
+  public static String getModifierMessage(String modifier) {
 	  ConfigFile.Messages messages = INSTANCE.configFile.messages;
-	  if (messages.modifierMessages.containsKey(mod)) {
+	  if (messages.modifierMessages.containsKey(modifier)) {
 		// Remove excess unicode C2 characters
-		String message = messages.modifierMessages.get(mod);
+		String message = messages.modifierMessages.get(modifier);
 		String recoded_message = "";
 		recoded_message = message.replaceAll("\u00C2", "");
 		return recoded_message;
