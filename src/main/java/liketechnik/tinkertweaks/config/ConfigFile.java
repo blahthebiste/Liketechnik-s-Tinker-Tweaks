@@ -25,7 +25,7 @@ import static slimeknights.tconstruct.tools.harvest.TinkerHarvestTools.scythe;
 @ConfigSerializable
 public class ConfigFile extends AbstractConfigFile {
 
-  private final static int CONFIG_VERSION = 3;
+  private final static int CONFIG_VERSION = 4;
   
   private String[] defaultModifiers = new String[]{"haste", "luck", "diamond", "reinforced", "soulbound", "mending_moss", "glowing"};
   private String[] allModifiers = new String[]{"aquadynamic", "hovering", "harvestwidth", "endspeed", "momentum", "superheat", "baconlicious", "soulbound", "reinforced", "sharp", "crumbling", "splintering", "crude2", "crude1",
@@ -172,12 +172,20 @@ public class ConfigFile extends AbstractConfigFile {
 
   @ConfigSerializable
   static class General {
-
-    @Setting(comment = "Changes the amount of modifiers a newly build tool gets.")
+    @Setting(comment = "Changes the amount of modifier slots a newly built tool gets (default: 3).")
     public int newToolMinModifiers = 3;
 
     @Setting(comment = "Maximum achievable levels. If set to 0 or lower there is no upper limit")
     public int maximumLevels = -1;
+	  
+    @Setting(comment = "If set to true, you get a random modifier on level up (default: true).")
+    public boolean bonusRandomModifier = true;
+	  
+    @Setting(comment = "If set to true, you get an extra free modifier slot on level up (default: false).")
+    public boolean bonusModifierSlot = false;
+	  
+    @Setting(comment = "If set to true, your tools' base stats increase on level up (default: false).")
+    public boolean bonusStats = false;
   }
 
   @ConfigSerializable
@@ -193,10 +201,7 @@ public class ConfigFile extends AbstractConfigFile {
   }
   
   @ConfigSerializable
-  static class Modifier {
-    @Setting(comment = "If set to true, on top of the random modifier granted, you get another free modifier on level up.")
-    public boolean both = false;
-    
+  static class Modifier {  
     @Setting(comment = "Modifiers used when no more specific entry is present for the tool.")
     public List<String> modifiers = new ArrayList<>();
     
@@ -204,6 +209,29 @@ public class ConfigFile extends AbstractConfigFile {
     public Map<Item, List<String>> modifiersForTool = new HashMap<>();
   }
   
+  @ConfigSerializable
+  static class BonusStats {  
+    @Setting(comment = "How each stat is affected on levelup if bonusStats is true. The bonus stacks upon each level up.")
+    
+    @Setting(comment = "Adds to base damage. Default = 1.0")  
+    public float damageBonus = 1.0f;
+	  
+    @Setting(comment = "Multiplies base durability. Default = 1.1")  
+    public float durabilityMultiplier = 1.1f;
+	  
+    @Setting(comment = "Adds to base mining speed. Default = 0.5")  
+    public float miningSpeedBonus = 0.5f;
+	  
+    @Setting(comment = "Multiplies base attack speed. Default = 1.05")  
+    public float attackSpeedMultiplier = 1.05f;
+	
+    @Setting(comment = "Adds to base draw speed. Only affects bows and crossbows. Default = 0.5")  
+    public float drawSpeedBonus = 0.5f;
+	  
+    @Setting(comment = "Adds to base projectile speed. Only affects bows and crossbows. Default = 0.5")  
+    public float projectileSpeedBonus = 0.5f;
+  }
+	
   @ConfigSerializable
   static class Messages {
     @Setting(comment = "Use level titles from this config file instead of hard-coded values? (This is the part of the tooltip that says your skill with the tool is Clumsy or Accustomed or Legendary, etc)")
@@ -230,5 +258,8 @@ public class ConfigFile extends AbstractConfigFile {
 	// modifierMessages.putAll(defaultModifierMessages);
     @Setting(comment = "Generic modifier message to fall back on:")
     public String genericModifierMessage = "Your tool has gained a new modifier!";
+	  
+    @Setting(comment = "Message to play in chat when a tool's stats increase (only applicible if the BonusStats module is enabled; empty by default.):")
+    public String genericStatsUpMessage = "";
   }
 }
