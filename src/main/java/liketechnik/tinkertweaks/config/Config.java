@@ -49,8 +49,33 @@ public class Config extends AbstractConfig {
     return modifiers;
   }
   
-  public static boolean modifierAndFree() {
-    return INSTANCE.configFile.modifier.both;
+  // DEPRECATED
+  // public static boolean modifierAndFree() {
+    // return INSTANCE.configFile.modifier.both;
+  // }
+  
+   public static boolean addRandomModifierOnLevelup() {
+    return INSTANCE.configFile.general.bonusRandomModifier;
+  }
+   public static boolean addModifierSlotOnLevelup() {
+    return INSTANCE.configFile.general.bonusModifierSlot;
+  }
+   public static boolean addBonusStatsOnLevelup() {
+    return INSTANCE.configFile.general.bonusStats;
+  }
+  
+  
+   public static Map<String, Float> statBonusValues() {
+    Map<String, Float> statsMap = new HashMap<String, Float>() {{
+	  put("damageBonus",Float.valueOf(INSTANCE.configFile.bonusstats.damageBonus));
+	  put("durabilityMultiplier",Float.valueOf(INSTANCE.configFile.bonusstats.durabilityMultiplier));
+	  put("miningSpeedBonus",Float.valueOf(INSTANCE.configFile.bonusstats.miningSpeedBonus));
+	  put("attackSpeedMultiplier",Float.valueOf(INSTANCE.configFile.bonusstats.attackSpeedMultiplier));
+	  put("drawSpeedBonus",Float.valueOf(INSTANCE.configFile.bonusstats.drawSpeedBonus));
+	  put("projectileSpeedBonus",Float.valueOf(INSTANCE.configFile.bonusstats.projectileSpeedBonus));
+	}};
+	
+	return statsMap;
   }
   
   // Newly added for getting message strings:
@@ -68,6 +93,9 @@ public class Config extends AbstractConfig {
   }
   public static String getGenericModifierMessage() {
 	  return INSTANCE.configFile.messages.genericModifierMessage;
+  }
+  public static String getStatsUpMessage() {
+	  return INSTANCE.configFile.messages.genericStatsUpMessage;
   }
   public static String getLevelTitle(int currentLevel) {
 	  ConfigFile.Messages messages = INSTANCE.configFile.messages;

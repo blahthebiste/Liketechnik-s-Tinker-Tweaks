@@ -96,6 +96,8 @@ public class ConfigFile extends AbstractConfigFile {
   @Setting
   Modifier modifier = new Modifier();
   @Setting
+  BonusStats bonusstats = new BonusStats();
+  @Setting
   Messages messages = new Messages();
 
   public ConfigFile() {
@@ -211,24 +213,22 @@ public class ConfigFile extends AbstractConfigFile {
   
   @ConfigSerializable
   static class BonusStats {  
-    @Setting(comment = "How each stat is affected on levelup if bonusStats is true. The bonus stacks upon each level up.")
-    
-    @Setting(comment = "Adds to base damage. Default = 1.0")  
+    @Setting(comment = "Adds to base damage. Applied each levelup. Does nothing if bonusStats is false. Default = 1.0")  
     public float damageBonus = 1.0f;
 	  
-    @Setting(comment = "Multiplies base durability. Default = 1.1")  
+    @Setting(comment = "Multiplies base durability. Applied each levelup. Does nothing if bonusStats is false. Default = 1.1")  
     public float durabilityMultiplier = 1.1f;
 	  
-    @Setting(comment = "Adds to base mining speed. Default = 0.5")  
+    @Setting(comment = "Adds to base mining speed. Applied each levelup. Does nothing if bonusStats is false. Default = 0.5")  
     public float miningSpeedBonus = 0.5f;
 	  
-    @Setting(comment = "Multiplies base attack speed. Default = 1.05")  
+    @Setting(comment = "Multiplies base attack speed. Applied each levelup. Does nothing if bonusStats is false. Default = 1.05")  
     public float attackSpeedMultiplier = 1.05f;
 	
-    @Setting(comment = "Adds to base draw speed. Only affects bows and crossbows. Default = 0.5")  
+    @Setting(comment = "Adds to base draw speed. Only affects bows and crossbows. Applied each levelup. Does nothing if bonusStats is false. Default = 0.5")  
     public float drawSpeedBonus = 0.5f;
 	  
-    @Setting(comment = "Adds to base projectile speed. Only affects bows and crossbows. Default = 0.5")  
+    @Setting(comment = "Adds to base projectile speed. Only affects bows and crossbows. Applied each levelup. Does nothing if bonusStats is false. Default = 0.5")  
     public float projectileSpeedBonus = 0.5f;
   }
 	
@@ -248,7 +248,7 @@ public class ConfigFile extends AbstractConfigFile {
     // public Map<Integer, String> levelupMessages = defaultLevelupMessages;
 	// levelupMessages.putAll(defaultLevelupMessages);
     @Setting(comment = "Generic Levelup message to fall back on:")
-    public String genericLevelupMessage = "Your %s has reached level %s";
+    public String genericLevelupMessage = "Your %s has reached level %d";
 	
     @Setting(comment = "Use modifier messages from this config file instead of hard-coded values? (This is the message printed to the chat telling you what random modifier you got)")
     public boolean configModifierMessages = true;

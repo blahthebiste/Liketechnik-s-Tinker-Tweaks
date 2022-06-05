@@ -16,6 +16,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.library.modifiers.*;
 
+import java.util.UnknownFormatConversionException;
+
 @Mod.EventBusSubscriber(modid = LiketechniksTinkerTweaks.MODID)
 public class CommonProxy {
 
@@ -25,10 +27,21 @@ public class CommonProxy {
     Sounds.PlaySoundForPlayer(player, SOUND_LEVELUP, 1f, 1f);
   }
 
+  public void sendStatsUpMessage(int level, ItemStack itemStack, EntityPlayer player) {
+    ITextComponent textComponent;
+	textComponent = new TextComponentString(TextFormatting.DARK_AQUA + String.format(Config.getStatsUpMessage() + TextFormatting.DARK_AQUA, level));
+    player.sendStatusMessage(textComponent, false);
+  }
+  
   public void sendLevelUpMessage(int level, ItemStack itemStack, EntityPlayer player) {
     ITextComponent textComponent;
 	if (Config.shouldUseConfigLevelupMessages()) {
-		textComponent = new TextComponentString(TextFormatting.DARK_AQUA + String.format(Config.getLevelupMessage(level), itemStack.getDisplayName() + TextFormatting.DARK_AQUA));
+		try {
+			textComponent = new TextComponentString(TextFormatting.DARK_AQUA + String.format(Config.getLevelupMessage(level), itemStack.getDisplayName() + TextFormatting.DARK_AQUA, level));
+		}
+		catch (UnknownFormatConversionException e) {
+			textComponent = new TextComponentString(TextFormatting.DARK_AQUA + String.format(Config.getGenericLevelupMessage(), itemStack.getDisplayName(), level) + TextFormatting.DARK_AQUA);
+		}
 	}
 	else {
 		// special message
@@ -64,7 +77,7 @@ public class CommonProxy {
 	}
     player.sendStatusMessage(textComponent, false);
   }
-
+  
   private static SoundEvent sound(String name) {
     ResourceLocation location = new ResourceLocation(LiketechniksTinkerTweaks.MODID, name);
     SoundEvent event = new SoundEvent(location);

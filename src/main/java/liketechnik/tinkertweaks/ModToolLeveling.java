@@ -25,6 +25,7 @@ import slimeknights.tconstruct.library.tinkering.TinkersItem;
 import slimeknights.tconstruct.library.tools.ProjectileLauncherNBT;
 import slimeknights.tconstruct.library.tools.ranged.BowCore;
 import slimeknights.tconstruct.library.utils.TagUtil;
+import slimeknights.tconstruct.library.tools.ToolNBT;
 import slimeknights.tconstruct.library.utils.Tags;
 import slimeknights.tconstruct.library.utils.TinkerUtil;
 import slimeknights.tconstruct.library.utils.ToolBuilder;
@@ -32,6 +33,8 @@ import slimeknights.tconstruct.library.utils.ToolHelper;
 import slimeknights.tconstruct.tools.melee.TinkerMeleeWeapons;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.*;
 
 public class ModToolLeveling extends ProjectileModifierTrait {
 
@@ -169,65 +172,78 @@ public class ModToolLeveling extends ProjectileModifierTrait {
     if (data.xp >= xpForLevelup) {
       data.xp = 0; // Do not carry over extra XP; max 1 levelup per instance of XP gain
       data.level++;
-    
+	  leveledUp = true;
       List<IModifier> modifiers = Config.getModifiers(tool.getItem());
       int modifierIndex;
       boolean applied = false;
-      do {
-        if (Config.modifierAndFree()) {
-          modifierIndex = random.nextInt(modifiers.size());
-        } else {
-          modifierIndex = random.nextInt(modifiers.size() + 1);
-        }
-      
-        if (modifierIndex == modifiers.size() || Config.modifierAndFree()) {
-          data.bonusModifiers++;
-        }
-        if (modifierIndex != modifiers.size() || Config.modifierAndFree()) {
-          modifier = modifiers.get(modifierIndex);
-        
-          int freeModifiers = ToolHelper.getFreeModifiers(tool);
-        
-          try {
-            if (modifier.canApply(tool, tool)) {
-              modifier.apply(tool);
-              applied = true;
-            } else {
-              modifiers.remove(modifierIndex);
-              continue;
-            }
-          } catch (TinkerGuiException e) {
-            modifiers.remove(modifierIndex);
-            continue;
-          }
-        
-          data.bonusModifiers += freeModifiers - ToolHelper.getFreeModifiers(tool);
-        }
-      } while (!applied && !modifiers.isEmpty());
-    
-      leveledUp = true;
+	  if (Config.addRandomModifierOnLevelup()) {
+		//System.out.println("Doing random modifier on levelup");
+		do {
+			if (Config.addModifierSlotOnLevelup()) {
+			  modifierIndex = random.nextInt(modifiers.size());
+			} else {
+			  modifierIndex = random.nextInt(modifiers.size() + 1);
+			}
+		  
+			if (modifierIndex == modifiers.size() || Config.addModifierSlotOnLevelup()) {
+			  data.bonusModifiers++;
+			}
+			if (modifierIndex != modifiers.size() || Config.addModifierSlotOnLevelup()) {
+			  modifier = modifiers.get(modifierIndex);
+			
+			  int freeModifiers = ToolHelper.getFreeModifiers(tool);
+			
+			  try {
+				if (modifier.canApply(tool, tool)) {
+				  modifier.apply(tool);
+				  applied = true;
+				} else {
+				  modifiers.remove(modifierIndex);
+				  continue;
+				}
+			  } catch (TinkerGuiException e) {
+				modifiers.remove(modifierIndex);
+				continue;
+			  }
+			
+			  data.bonusModifiers += freeModifiers - ToolHelper.getFreeModifiers(tool);
+			}
+		} while (!applied && !modifiers.isEmpty());
+	  }
+	  else if (Config.addModifierSlotOnLevelup()) {
+		//System.out.println("Doing extra slot on levelup");
+		// All we need to do for extra free modifier:
+		data.bonusModifiers++;
+	  }
     }
-    
-    data.write(modifierTag);
-    //tagList.set(index, modifierTag);
-    TagUtil.setModifiersTagList(tool, tagList);
-    
+	data.write(modifierTag);
+	//tagList.set(index, modifierTag);
+	TagUtil.setModifiersTagList(tool, tagList);
     if (leveledUp) {
       this.apply(tool);
-      if (!player.world.isRemote) {
+	  //System.out.println("Tool nbt after apply:"+TagUtil.getTagSafe(tool));
+      try {
+	    //System.out.println("Tool nbt before rebuild:"+TagUtil.getTagSafe(tool));
+        NBTTagCompound rootTag = TagUtil.getTagSafe(tool);
+        ToolBuilder.rebuildTool(rootTag, (TinkersItem) tool.getItem());
+		if(Config.addBonusStatsOnLevelup()) {
+		  // All we need to do for stat growth:
+		  tool = updateStats(tool);
+	    }
+        tool.setTagCompound(rootTag);
+		//System.out.println("Final tool nbt:"+TagUtil.getTagSafe(tool));
+      } catch (TinkerGuiException e) {
+        // this should never happen
+        e.printStackTrace();
+      }
+	  if (!player.world.isRemote) {
         // for some reason the proxy is messed up. cba to fix now
         LiketechniksTinkerTweaks.proxy.playLevelupDing(player);
         LiketechniksTinkerTweaks.proxy.sendLevelUpMessage(data.level, tool, player);
         // add extra message for the modifier
-        LiketechniksTinkerTweaks.proxy.sendModifierMessage(modifier, tool, player);
-      }
-      try {
-        NBTTagCompound rootTag = TagUtil.getTagSafe(tool);
-        ToolBuilder.rebuildTool(rootTag, (TinkersItem) tool.getItem());
-        tool.setTagCompound(rootTag);
-      } catch (TinkerGuiException e) {
-        // this should never happen
-        e.printStackTrace();
+        if (modifier != null) LiketechniksTinkerTweaks.proxy.sendModifierMessage(modifier, tool, player);
+		// TODO: send stats up message
+		if(Config.addBonusStatsOnLevelup()) LiketechniksTinkerTweaks.proxy.sendStatsUpMessage(data.level, tool, player);
       }
     }
   }
@@ -243,7 +259,7 @@ public class ModToolLeveling extends ProjectileModifierTrait {
     return getLevelData(TinkerUtil.getModifierTag(itemStack, getModifierIdentifier()));
   }
 
-  private ToolLevelNBT getLevelData(NBTTagCompound modifierNBT) {
+  private static ToolLevelNBT getLevelData(NBTTagCompound modifierNBT) {
     return new ToolLevelNBT(modifierNBT);
   }
 
@@ -261,4 +277,27 @@ public class ModToolLeveling extends ProjectileModifierTrait {
       }
     }
   }
+  
+  // Stolen from https://github.com/Mrthomas20121-Mods/Tinkers-Leveling/blob/38a771651a953702d82fce1c07f42ad38d425f76/src/main/java/mrthomas20121/tinkers_leveling/util/ToolLevelData.java#L10
+  // Main difference is this is always applied right at the end after levelup, and this is not tracked in the base stats or in a modifer.
+  public static ItemStack updateStats(ItemStack tool) {
+		// First get the level of the tool
+	    NBTTagList tagList = TagUtil.getModifiersTagList(tool);
+		int index = TinkerUtil.getIndexInCompoundList(tagList, "tinkertweaks");
+		NBTTagCompound modifierTag = tagList.getCompoundTagAt(index);
+		IModifier modifier = null;
+		ToolLevelNBT data = getLevelData(modifierTag);
+		int level = data.level;
+		// Get the stats map
+		Map<String, Float> statsMap = Config.statBonusValues();
+        ToolNBT toolNBT = TagUtil.getOriginalToolStats(tool);
+		// Apply stat bonuses based on current level
+        toolNBT.attackSpeedMultiplier*=Math.pow(statsMap.get("attackSpeedMultiplier"), level);
+        toolNBT.durability*=Math.pow(statsMap.get("durabilityMultiplier"), level);
+        toolNBT.speed+=(statsMap.get("miningSpeedBonus")*level);
+        toolNBT.attack+=(statsMap.get("damageBonus")*level);
+		// Boost bow stats if the tool is bow or crossbow TODO:
+        TagUtil.setToolTag(tool, toolNBT.get());
+		return tool;
+    }
 }
