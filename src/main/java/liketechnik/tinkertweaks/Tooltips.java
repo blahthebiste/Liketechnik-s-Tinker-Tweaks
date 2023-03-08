@@ -41,7 +41,12 @@ public final class Tooltips {
   }
 
   private static String getLevelTooltip(int level) {
-    return String.format("%s: %s", I18n.translateToLocal("tooltip.level"), getLevelString(level));
+    if(Config.shouldUseConfigLevelTitles()) {
+      return String.format("%s: %s", I18n.translateToLocal("tooltip.level"), Config.getLevelTitle(level));
+    }
+    else {
+      return String.format("%s: %s", I18n.translateToLocal("tooltip.level"), getLevelString(level));
+    }
   }
 
   public static String getLevelString(int level) {

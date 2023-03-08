@@ -3,7 +3,7 @@ package liketechnik.tinkertweaks.config;
 import net.minecraft.item.Item;
 
 import java.io.*;
-// import java.io.File;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -48,11 +48,7 @@ public class Config extends AbstractConfig {
     modifier.modifiersForTool.getOrDefault(item, modifier.modifiers).stream().forEach(mod -> modifiers.add(TinkerRegistry.getModifier(mod)));
     return modifiers;
   }
-  
-  // DEPRECATED
-  // public static boolean modifierAndFree() {
-    // return INSTANCE.configFile.modifier.both;
-  // }
+
   
    public static boolean addRandomModifierOnLevelup() {
     return INSTANCE.configFile.general.bonusRandomModifier;

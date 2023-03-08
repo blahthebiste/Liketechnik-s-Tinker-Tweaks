@@ -13,6 +13,7 @@ import slimeknights.mantle.config.AbstractConfigFile;
 import slimeknights.mantle.configurate.objectmapping.Setting;
 import slimeknights.mantle.configurate.objectmapping.serialize.ConfigSerializable;
 import slimeknights.tconstruct.library.TinkerRegistry;
+import slimeknights.tconstruct.library.tools.ToolCore;
 import slimeknights.tconstruct.library.modifiers.TinkerGuiException;
 import slimeknights.tconstruct.library.utils.TagUtil;
 import slimeknights.tconstruct.library.utils.Tags;
