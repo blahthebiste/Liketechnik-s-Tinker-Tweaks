@@ -138,7 +138,7 @@ public class ConfigFile extends AbstractConfigFile {
                             .filter(mod -> TinkerRegistry.getModifier(mod) != null)
                             .filter(mod -> {
                               try {
-                                ItemStack toolInstance = tool.getDefaultInstance();
+                                ItemStack toolInstance = new ItemStack(tool, 1);
                                 NBTTagCompound tag = TagUtil.getToolTag(toolInstance);
                                 tag.setInteger(Tags.FREE_MODIFIERS, 100);
                                 TagUtil.setToolTag(toolInstance, tag);
