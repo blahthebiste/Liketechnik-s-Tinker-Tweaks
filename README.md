@@ -11,10 +11,6 @@ This mod is currently only available for MC 1.12. You can find the latest releas
 
 To use this mod you obviously need Tinker's Construct.
 
-# Issues
-
-Please use the [GitHub Issue Tracker](https://github.com/liketechnik/Liketechnik-s-Tinker-Tweaks/issues) for reporting problems and crashes or making feature requests.
-
 # Credits
 
 This mod forked from  [Tinker's Tool Leveling](https://github.com/SlimeKnights/TinkersToolLeveling), that provided the base for this mod. I'm really thankfull for their mod (you can find the reason for the fork here: https://github.com/SlimeKnights/TinkersToolLeveling/issues/8), if you just want the free modifiers, go there.
